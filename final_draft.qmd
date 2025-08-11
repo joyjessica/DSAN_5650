@@ -1,0 +1,210 @@
+---
+title: "Cultural Drivers of Fertility: A Cross-National Causal Analysis"
+author: "Jessica Joy"
+format:
+  html:
+    embed-resources: true
+    self-contained: true
+---
+
+# Abstract
+
+Fertility rates have been falling in many parts of the world, but the reasons behind this trend are still not fully clear. From 2014 to 2020, the rate in the U.S. has consistently decreased by 2% each year (CDC, 2024). Many explanations have been suggested, including economic challenges, changing cultural values, and shifts in lifestyle or behavior, but it is not always clear which of these factors plays a causal role in individuals' decisions about whether or not to have children.
+
+This study examines four such factors; religiosity, heavy media use, traditional gender role attitudes, and well-being,using cross-national data from the World Values Survey and causal inference methods including propensity score weighting, Double Machine Learning, and sensitivity analysis.
+
+Pooled results show that high religiosity (+0.40 pp) and traditional gender role attitudes (+0.14 pp) are associated with higher probabilities of having children, while heavy media use (–0.20 pp) is associated with lower fertility, and well-being has a modest positive effect (+0.06 pp). Country-level analyses reveal substantial heterogeneity, with certain effects concentrated in specific cultural or institutional contexts. Sensitivity analysis indicates that religiosity effects are most robust to unobserved confounding (~10% residual variance needed to nullify), while well-being effects are the least robust (~1%). These findings highlight the importance of considering cultural and attitudinal drivers alongside economic conditions in understanding fertility decline.
+
+# Introduction
+
+Global fertility decline has been one of the most significant demographic shifts of the past half-century. Many societies now face below-replacement fertility, raising concerns about aging populations, shrinking workforces, and the long-term sustainability of social systems. While much research has focused on economic factors — including income, urbanization, education, and labor market participation — cultural, attitudinal, and psychological factors also shape reproductive decisions.
+
+Religiosity has long been linked to pro-natalist values. Media use may influence fertility by shaping perceptions of family life and economic constraints. Gender role attitudes affect how couples allocate time and resources toward family formation. Well-being may either encourage childbearing through optimism and life satisfaction, or reduce it if high satisfaction is achievable without children.
+
+This study uses cross-national survey data and modern causal inference techniques to estimate the effects of these four factors on fertility, accounting for individual and national-level confounders. The goal is to provide a clearer understanding of the magnitude, robustness, and variability of these relationships across different social and cultural contexts.
+
+# Literature Review
+
+Frejka & Westoff (2006) explore one potential piece of this puzzle by examining the relationship between religion and fertility across the U.S. and Europe. Their analysis is motivated by a pattern that American women are substantially more religious than European women and also maintain higher fertility rates. They find positive associations between religiosity and fertility in both regions and estimate that if European women were as religious as Americans, European fertility could theoretically increase by 13–14 percent.
+
+Their analysis reveals a few key patterns in how religiosity relates to fertility. They find that the strength of the relationship varies quite a bit across different parts of Europe, with noticeable differences between regions like Northern and Southern Europe. They also show that religiosity continues to predict fertility even after adjusting for standard demographic factors like age, marital status, education, and income. Lastly, they show that both behavioral measures (church attendance) and attitudinal measures (importance of religion) predict fertility outcomes.
+
+Ning et al. (2022) examine how media use shapes fertility intentions among Chinese women of reproductive age, with a focus on the mediating role of social trust. Using nationally representative 2017 China General Social Survey data, they distinguish between traditional media (television, radio, newspapers) and new media (internet, mobile news) use, and find that higher new media use is associated with lower fertility intentions, while traditional media use shows no significant effect. Social trust emerges as a positive predictor of fertility intentions and partially mediates the relationship between new media use and fertility intentions.
+
+Their analysis highlights that new media may lower fertility intentions by amplifying negative social narratives about marriage, parenting, and fertility policies, which can undermine trust in institutions and interpersonal relationships. In contrast, traditional media’s more policy-driven, one-way messaging lacks the same interactive environment that fosters such distrust. This work extends prior research by integrating media consumption patterns with the social trust mechanism, offering a novel lens on how mediated environments influence fertility-related decision-making.
+
+# What's Missing
+
+There are a few key gaps that limit Frejka and Westoff's ability to make strong causal claims about the effect of religiosity on fertility. First, their analysis uses a basic logistic regression with a fairly limited set of controls, which opens the door to confounding. Religious and non-religious individuals likely differ in all sorts of unobserved ways that also affect fertility decisions. This can include things like stronger preferences for traditional family roles, access to supportive community networks, or different economic priorities that could make raising larger families more feasible. Without adjusting for those factors, it's hard to isolate the actual role of religiosity.
+
+In addition, they rely on single indicators like church attendance and self-rated importance of religion, which may not capture the full picture of what religion means in people's lives. Religious belief, behavior, identity, and community can each matter differently.
+
+They group countries into broad regional categories, like Northern vs. Southern Europe, which may mask important variation across individual countries. Different national contexts can have very different religious institutions, fertility norms, or social policies that shape how religiosity matters. Similarly, they don't fully control for development-related factors like urbanization or GDP. Secularization tends to go hand in hand with development, so it may become unclear whether religion is driving fertility differences or just moving with broader economic shifts. Lastly, they do not cite evidence that they checked for common support, making it unclear if the religious and non-religious groups they're comparing are similar enough to make fair comparisons.
+
+There are a few important limitations that constrain Ning et al.’s ability to make strong causal claims about the effect of media use on fertility intentions. Their analysis is based on cross-sectional CGSS data, which means they cannot establish the temporal ordering of media use, social trust, and fertility intentions. Without longitudinal data or causal inference methods, it is unclear whether media use influences fertility intentions or whether women with certain fertility preferences gravitate toward specific media habits. The reliance on single-item measures for both media use and social trust further limits the ability to capture nuanced differences in content type, context, or trust dimensions that could shape the relationship.
+
+These limitations create an opportunity for my causal research to build on their findings by moving beyond correlation to more credible causal identification. By leveraging richer measures of key constructs, incorporating a broader set of controls, and applying causal inference methods such as propensity score weighting and DoubleML, my work aims to better isolate the pathways—particularly the role of social trust—through which mediated environments shape fertility outcomes.
+
+# Methodology
+
+To build on previous research, I use propensity score methods alongside DoubleML estimation to draw more credible causal conclusions about how religiosity and other social and attitudinal factors affect fertility patterns.
+
+## Variable Construction
+The analysis begins with detailed variable engineering using survey items from the World Values Survey and supplemental World Bank indicators. Fertility is measured both as a binary indicator of whether the respondent has children and as a count variable capped at ten to mitigate outliers. Religiosity is constructed as a composite index combining standardized measures of the importance of religion, the importance of God, and religious service attendance. Individuals in the top third of the religiosity distribution are classified as high religiosity, and alternative cutoffs at 50 percent, 67 percent, and 75 percent are tested for robustness. Additional treatments are defined for heavy media use, traditional gender attitudes, and high well-being. Heavy media use captures daily use of at least two digital information sources. Traditional gender attitudes are measured using an index of inverted gender role items and dichotomized at the median. High well-being is based on a composite index of happiness, life satisfaction, freedom of choice, and financial satisfaction.
+
+Confounders are selected dynamically based on the treatment variable to avoid post-treatment bias. For religiosity, this includes demographic, economic, and attitudinal covariates but excludes family or gender outcomes that may lie on the causal pathway. For other treatments, the relevant confounder set is adjusted accordingly. National-level controls for GDP per capita, urban population share, life expectancy, and population size are included in pooled analyses but excluded in country-level models. Countries are retained only if they have at least 1,200 respondents and sufficient variation in the treatment variable to allow meaningful comparisons.
+
+## Propensity Score
+Propensity scores are estimated using logistic regression on the treatment-specific confounder set. Observations are restricted to complete cases for the relevant variables. Overlap between treatment and control groups is assessed through density plots and the common support range is reported to ensure that comparisons are made only within comparable subpopulations. In country-level analyses, observations outside the common support range are dropped before estimation.
+
+## DoubleML Estimation
+I use Double Machine Learning to estimate the average treatment effect. This approach is doubly robust, providing consistent estimates if either the treatment model or the outcome model is correctly specified. Cross-fitting is used to reduce overfitting. Linear regression is applied for the outcome model and logistic regression for treatment assignment. The method is implemented in both pooled and country-specific datasets to capture heterogeneity across contexts.
+
+## Cross-National Comparisons
+The analysis is replicated for each country that meets the sample size and variation thresholds. For each country, results include sample size, treatment rate, fertility rate, estimated effect size, confidence intervals, common support range, and whether the effect is statistically significant.
+
+## Sensitivity Analysis
+To evaluate robustness to unmeasured confounding, I use the sensemakr framework in R. This method reports the partial R-squared of the treatment, robustness values for q = 1, and robustness values for q = 1 at the 0.05 significance level. A benchmark covariate, marital status, is used to contextualize the magnitude of robustness values. Sensitivity analyses are conducted separately for religiosity, media use, gender attitudes, and well-being as treatments, in both pooled and country-level datasets.
+
+# Results
+
+### 1. High Religiosity
+#### Common Support
+The propensity score analysis shows strong overlap between individuals with high and low religiosity, with scores ranging from 0.019 to 0.837. This range covers the vast majority of the sample and defines the region of common support, where valid causal comparisons can be made. Within this region, individuals share similar background characteristics, making them plausibly comparable in their likelihood of being highly religious.
+
+By restricting estimation to this region, the analysis avoids extrapolating to extreme ends of the religiosity spectrum, where no suitable comparison group exists. The results therefore apply to individuals whose religious engagement could plausibly vary in response to social, cultural, or institutional changes.
+
+![](plots/common_support_religion.png)
+
+#### Overall Causal Effect
+The pooled DoubleML estimate indicates that high religiosity increases the number of children by 0.402 (SE = 0.0126, p < 0.001) among individuals in the region of common support. This effect remains statistically significant after adjusting for both individual-level covariates and structural country-level factors, including GDP per capita, urbanization, and life expectancy.
+
+While moderate in magnitude, the effect suggests that religiosity independently contributes to sustaining higher fertility even in economically advanced or urbanized settings, where fertility rates tend to decline.
+
+#### Cross-National Variation
+Country-specific estimates reveal substantial heterogeneity in the religiosity–fertility relationship. Large positive effects are observed in the United States (0.406, p < 0.001), Turkey (0.330, p < 0.001), Canada (0.346, p < 0.001), and the Netherlands (0.472, p = 0.001). Other contexts, such as Pakistan (-0.056, p = 0.453) and Brazil (-0.006, p = 0.950), show negligible or negative effects.
+
+The largest effects often occur in countries with broader common support widths, suggesting that effect size may depend on the breadth of comparable populations as well as on cultural or institutional contexts. In countries with smaller common support ranges, limited statistical power may contribute to non-significant findings.
+
+![](plots/countries_religion.png)
+
+#### Sensitivity Analysis
+Pooled results from the sensemakr framework indicate that an unobserved confounder would need to explain more than 10.6% of the residual variance in both the treatment and outcome to fully explain away the estimated effect. This threshold is over seven times greater than the explanatory power of the strongest measured covariate (“married” status, partial R² = 0.032), suggesting that the pooled estimate is relatively robust to omitted variable bias.
+
+Within-country robustness checks show variation in how sensitive the estimates are to unmeasured confounding. In high-effect countries such as the United States (robustness value = 0.070), Turkey (0.067), and the Netherlands (0.037), confounders would need to explain between 3.7% and 7.0% of the residual variance in both treatment and outcome to nullify the estimated effects. These thresholds are substantially higher than the explanatory power of most measured covariates, indicating moderate robustness.
+
+In countries with smaller or non-significant effects, robustness values are correspondingly lower (e.g., Pakistan = 0.000, Brazil = 0.000), meaning those estimates could be explained away by relatively weak unmeasured confounding. This pattern is consistent with the smaller sample sizes and narrower common support ranges observed in these contexts.
+
+![](data/sensitivity_results/pooled_sense_plot_religion.png)
+
+### 2. High Media Use
+
+#### Common Support
+The propensity score distribution shows strong overlap between individuals with high and low media use, with scores ranging from 0.013 to 0.902. This range encompasses most of the sample and defines the region of common support, where valid causal comparisons can be made. Within this range, individuals have broadly similar background characteristics, making them plausibly comparable in their likelihood of being high media users.
+
+By focusing on this region, the analysis avoids extrapolation to individuals with extremely low or extremely high media exposure, for whom no suitable comparison group exists. This ensures that the estimated effects are relevant to populations whose media use could plausibly vary due to policy, technological, or cultural changes.
+
+![](plots/common_support_media.png)
+
+#### Overall Causal Effect
+The pooled DoubleML results indicate that high media use decreases the number of children by 0.238 (SE = 0.0127, 95% CI: -0.262 to -0.213, p < 0.001) among individuals in the region of common support. This effect remains statistically significant after adjusting for both individual-level demographics and country-level structural controls.
+
+While modest in size, the negative sign suggests that greater media exposure is associated with lower fertility, independent of major economic and demographic factors. This result aligns with theories that new media environments can amplify narratives and information that reduce fertility intentions or change attitudes toward family formation.
+
+#### Cross-National Variation
+Country-specific analyses show substantial variation in the association between high media use and fertility. Negative and statistically significant effects are observed in China (-0.104, p = 0.0025), Turkey (-0.178, p = 0.0012), and Pakistan (-0.378, p = 0.0297). In contrast, several countries, including the United States (0.118, p = 0.052) and Australia (0.182, p = 0.124), show positive but non-significant associations.
+
+Common support widths vary widely, from 0.58 in Canada to 0.96 in Indonesia, and countries with broader common support tend to show more stable estimates. However, in many cases, lack of statistical significance likely reflects smaller within-country sample sizes or narrower overlap rather than the absence of a true relationship.
+
+![](plots/countries_media.png)
+
+#### Sensitivity Analysis
+Pooled sensitivity analysis using sensemakr indicates that an unobserved confounder would need to explain more than 6.0% of the residual variance in both treatment and outcome to fully account for the observed pooled effect. This robustness value is about 3.5 times larger than the explanatory power of the strongest measured covariate (“married” status, partial R² = 0.017), suggesting moderate robustness to omitted variable bias.
+
+Within-country robustness values are generally smaller. In China (robustness value = 0.013) and Turkey (0.034), confounders would need to account for 1.3%–3.4% of the residual variance to nullify the observed effects—thresholds higher than most measured covariates in those models, but still small enough that modest unmeasured confounding could attenuate the estimates. In countries with non-significant results, robustness values approach zero, indicating that those estimates could be explained away by very weak confounders.
+
+![](data/sensitivity_results/pooled_sense_plot_media.png)
+
+### 3. High Traditional Gender
+
+#### Common Support
+The propensity score distribution for high versus low traditional gender attitudes ranges from 0.075 to 0.935, indicating strong common support across most of the sample. This overlap ensures that individuals with different gender attitudes are compared against similar counterparts in terms of their likelihood of holding traditional views, reducing reliance on extrapolation.
+
+Restricting the analysis to this region helps avoid bias from cases with extreme predicted probabilities of high traditional gender attitudes, where there is little or no comparable group.
+
+![](plots/common_support_gender.png)
+
+#### Overall Causal Effect
+In the pooled DoubleML analysis, high traditional gender attitudes are associated with an increase of 0.135 children (SE = 0.0118, 95% CI: 0.112 to 0.158, p < 0.001). This positive and statistically significant effect remains after adjusting for individual demographic factors and country-level structural controls.
+
+The size of the effect is smaller than that observed for religiosity but opposite in direction from the effect of high media use. This is consistent with the idea that traditional gender norms may reinforce family roles that encourage higher fertility.
+
+#### Cross-National Variation
+Country-level results show considerable heterogeneity. Significant positive effects are observed in Hong Kong SAR (0.150, p < 0.001) and the United States (0.195, p = 0.052, marginally significant), while Australia shows a significant negative effect (-0.199, p = 0.050). Most other countries have non-significant results, suggesting that the influence of traditional gender norms on fertility varies across cultural and policy contexts.
+
+Support widths range from 0.388 in Pakistan to 0.925 in Canada, with some countries (e.g., Netherlands, Pakistan) showing limited overlap, which may contribute to unstable estimates.
+
+![](plots/countries_gender.png)
+
+#### Sensitivity Analysis
+The pooled sensitivity analysis indicates a robustness value of 0.039, meaning that an unobserved confounder would need to explain more than 3.9% of the residual variance in both treatment and outcome to fully explain away the observed effect. This threshold is greater than the explanatory power of the strongest measured covariate, suggesting moderate robustness to omitted variable bias.
+
+At the country level, robustness values are generally low, with the highest in Hong Kong SAR (0.037) and the United States (0.014). These results imply that within-country effects are more vulnerable to modest unmeasured confounding, especially in countries with smaller sample sizes or narrower support ranges.
+
+![](data/sensitivity_results/pooled_sense_plot_gender.png)
+
+### 4. High Well Being
+
+#### Common Support
+The propensity score distribution for high versus low well-being ranges from 0.048 to 0.875, indicating strong overlap for most of the sample. This wide region of common support ensures that comparisons are made between individuals with similar likelihoods of reporting high well-being, reducing the risk of extrapolation.
+
+Restricting analysis to this range excludes extreme cases where very few comparable individuals exist, improving the credibility of the estimated effects.
+
+![](plots/common_support_happy.png)
+
+#### Overall Causal Effect
+In the pooled DoubleML analysis, high well-being is associated with an increase of 0.057 children (SE = 0.0113, 95% CI: 0.035 to 0.080, p < 0.001). This effect is smaller than that for high traditional gender attitudes and high religiosity but remains statistically significant even after adjusting for a broad set of individual- and country-level controls.
+
+The positive direction suggests that higher subjective well-being may be linked to greater family formation, possibly through increased optimism about the future, stronger social ties, or greater life satisfaction.
+
+#### Cross-National Variation
+At the country level, results are mixed. Turkey (-0.212, p < 0.001) and Pakistan (-0.189, p = 0.018) show significant negative associations between well-being and fertility, while no countries show significant positive effects after multiple testing adjustments. The United States and Australia both have positive estimates, but neither reaches statistical significance.
+
+Support widths vary substantially, from 0.576 in Pakistan to 0.928 in Australia, and countries with broader common support generally yield more stable estimates. In many cases, non-significant results may reflect smaller sample sizes or limited overlap rather than the absence of a relationship.
+
+![](plots/countries_happy.png)
+
+#### Sensitivity Analysis
+The pooled robustness value is 0.0119, indicating that an unobserved confounder would need to explain just over 1% of the residual variance in both treatment and outcome to fully account for the observed effect. This is higher than the explanatory power of most individual covariates in the model but still suggests that the result is more vulnerable to confounding than religiosity or traditional gender attitudes.
+
+Within-country robustness values are highest in Turkey (0.0458) and Pakistan (0.0165), where statistically significant negative effects were observed. These values imply moderate robustness in Turkey and lower robustness in Pakistan, meaning relatively modest confounders could attenuate the estimated effects.
+
+![](data/sensitivity_results/pooled_sense_plot_happy.png)
+
+
+# Discussion
+
+Across all four treatments—high religiosity, high media use, high traditional gender attitudes, and high well-being—the common support diagnostics indicate that treated and control groups are sufficiently comparable on observed characteristics. This overlap strengthens the credibility of the causal estimates by ensuring comparisons are made within regions of the propensity score distribution where both groups are well represented.
+
+The pooled results reveal a clear contrast in how these factors relate to fertility. High religiosity shows the largest positive association, followed by traditional gender attitudes, both of which remain significant after adjusting for extensive individual- and country-level controls. These effects suggest that cultural and value-based orientations—whether rooted in religion or gender norms—can sustain pro-natal behavior even in socio-economic contexts that generally discourage childbearing. In both cases, robustness checks indicate that only relatively strong unobserved confounders could fully explain away the observed effects, particularly for religiosity.
+
+In contrast, high media use is associated with a significant reduction in fertility. While the effect size is more modest, the negative direction aligns with theories that greater media exposure can shift attitudes toward smaller families or delay childbearing through alternative lifestyle framing. The robustness value here is lower than for religiosity but still requires a confounder with greater explanatory power than most measured covariates to fully nullify the pooled effect.
+
+High well-being, while also positively associated with fertility in the pooled analysis, shows a smaller effect size and greater vulnerability to omitted variable bias. This pattern suggests that subjective life satisfaction may support family formation but is less consistently predictive once unobserved factors are considered. Notably, some countries—such as Turkey and Pakistan—show significant negative effects of well-being on fertility, highlighting the importance of local cultural and economic context in shaping how happiness relates to reproductive decisions.
+
+The cross-national heterogeneity observed across all treatments underscores that the strength and even direction of these relationships depend heavily on country-specific conditions. Countries with broader common support tend to yield more stable estimates, while narrower overlap or smaller samples often correspond to weaker or non-significant results. This variation likely reflects differences in policy environments, institutional supports, and prevailing cultural norms that condition the link between individual attitudes and fertility behavior.
+
+Taken together, these findings reinforce that fertility outcomes are jointly shaped by cultural, informational, and subjective well-being factors, alongside structural economic conditions. While economic incentives remain important, they are unlikely to reverse fertility decline in isolation. Cultural commitments—whether through religion, traditional norms, or value systems—appear to play a meaningful role in sustaining fertility, while high media exposure may contribute to its erosion. Subjective well-being may facilitate childbearing under certain conditions but does not exert a uniformly positive influence across contexts.
+
+From a policy perspective, these results suggest that interventions aimed at influencing fertility behavior need to consider both the economic and cultural dimensions of decision-making. In particular, strategies that engage with prevailing social values, or that buffer against potentially fertility-reducing informational environments, may be more effective than those that target economic levers alone.
+
+# Limitations and Future Work
+
+Even with propensity score methods and DoubleML, the results could still be influenced by unmeasured confounding—especially for treatments like high well-being and traditional gender attitudes, which have lower robustness values. In some countries, small samples and narrow common support make it harder to tell if cross-national differences reflect real heterogeneity or just noise. Because the data are cross-sectional, we also can’t confirm the direction of causality. Country-level controls like GDP per capita, urbanization, and life expectancy could themselves be mediators rather than pure confounders, which means including them might underestimate some effects. Finally, the treatment definitions, while consistent, may mask meaningful cultural variation in what religiosity, media use, gender norms, or well-being actually mean across settings.
+
+Future work could use longitudinal or quasi-experimental designs to better establish causal direction, test richer and more context-specific measures, and use hierarchical models to capture both pooled effects and country-specific variation. Mediation analysis could also help clarify whether the effects we see operate through economic security, social capital, or attitudinal shifts, and replication with other datasets would help confirm how generalizable these results are.
+
+
+See Github
+
+Study referenced (will cite properly): <https://www.demogr.mpg.de/papers/working/wp-2006-013.pdf>
